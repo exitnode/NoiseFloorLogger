@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 
 import telnetlib
 import time
@@ -13,6 +14,7 @@ timeout = cfg.timeout
 db_file = cfg.db_file
 web_path = cfg.web_path
 
+# Create a new database if not already done before
 def init_db():
     if not os.path.isfile(db_file):
         print ("creating DB file " + db_file)
@@ -23,6 +25,7 @@ def init_db():
             "RRA:AVERAGE:0.5:12:86400",
             "DS:dbm:GAUGE:15:-80:50")
 
+# Connect to the rig via Telnet to rigctld
 def connect_rig():
     try:
         session = telnetlib.Telnet(host, port, timeout)
@@ -31,6 +34,8 @@ def connect_rig():
         print("Connecting to " + host + ":" + port + " failed:")
         print(e)
 
+# Query the rig for signal strength (l STRENGTH)
+# and write the output into the database
 def query_rig(session):
     global db_file
     session.write(b"l STRENGTH\n")
@@ -44,6 +49,7 @@ def query_rig(session):
         rrdtool.update(db_file, 'N:U')
     print(x)
 
+# Generate a PNG file with a graph for a certain time range
 def print_graph(filename,title,time_window):
     global db_file
     global web_path
@@ -62,6 +68,7 @@ def print_graph(filename,title,time_window):
     ]
     rrdtool.graphv(*graphv_args)
 
+# Generate an index.html file containing some graphs
 def gen_html():
     global web_path
     a = Airium()
@@ -95,9 +102,7 @@ def gen_html():
     with open(web_path + "/index.html", "w") as html_file:
         print(f"{html}", file=html_file)
 
- 
-
-
+# Main functionality
 init_db()
 s = connect_rig()
 while s:
