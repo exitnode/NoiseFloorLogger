@@ -1,4 +1,4 @@
-# NoiseFloorLogger
+# Noise Floor Logger
 
 The aim of this application is to log and monitor the signal strength of the noise floor at your QTH. This could be useful to locate sources of interference by correlating the collected data with other information, e.g. when sun collectors are active, your washing machine runs, your neighbours mowing their lawns etc.
 
@@ -13,11 +13,11 @@ This tool needs the following libraries/packages:
 
 You can install all required packages with the following commands (Ubuntu/Debian):
 
-'''
+```
 # sudo apt install rrdtool librrd-dev
 # sudo pip3 install rrdtool
 # sudo pip3 install airium 
-'''
+```
 
 You furthermore need to have your transceiver connected to a computer with rigctld (hamlib) running. This tool connects via Telnet to this computer and gets its data from there.
 
@@ -30,6 +30,12 @@ Don't forget to create the directory where you want to store the database as wel
 
 Start the tool without any parameters like this:
 
-'''
+```
 # python3 NoiseFloorLogger.py
-'''
+```
+
+## Output
+
+You'll find a html file with some graphs in the directory you configured inside _config.py_. Here is an example of such graph:
+
+![Example graph](example.png)
